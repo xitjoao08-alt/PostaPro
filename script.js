@@ -1,58 +1,91 @@
-/* ==========================================
-   POSTAPRO — V1
-========================================== */
+/* ==================================================
+   POSTAPRO V2
+   Gerador de posts + legendas + WhatsApp
+================================================== */
 
 
-/* ELEMENTOS */
+/* ================= ELEMENTOS ================= */
 
-const generateButton = document.getElementById("generateButton");
+const businessInput =
+  document.getElementById("business");
 
-const businessInput = document.getElementById("business");
-const productInput = document.getElementById("product");
-const priceInput = document.getElementById("price");
-const offerInput = document.getElementById("offer");
-const descriptionInput = document.getElementById("description");
-const styleInput = document.getElementById("style");
+const productInput =
+  document.getElementById("product");
 
-const generatedPost = document.getElementById("generatedPost");
+const priceInput =
+  document.getElementById("price");
 
-const captionOutput = document.getElementById("captionOutput");
-const whatsappOutput = document.getElementById("whatsappOutput");
+const offerInput =
+  document.getElementById("offer");
 
-const copyTextButton = document.getElementById("copyTextButton");
-const copyWhatsappButton = document.getElementById("copyWhatsappButton");
+const descriptionInput =
+  document.getElementById("description");
 
-const copyCaptionButton = document.getElementById("copyCaptionButton");
-const downloadButton = document.getElementById("downloadButton");
+const styleInput =
+  document.getElementById("style");
 
-const toast = document.getElementById("toast");
+const generateButton =
+  document.getElementById("generateButton");
 
+const generatedPost =
+  document.getElementById("generatedPost");
+
+const captionOutput =
+  document.getElementById("captionOutput");
+
+const whatsappOutput =
+  document.getElementById("whatsappOutput");
+
+const copyTextButton =
+  document.getElementById("copyTextButton");
+
+const copyWhatsappButton =
+  document.getElementById("copyWhatsappButton");
+
+const copyCaptionButton =
+  document.getElementById("copyCaptionButton");
+
+const downloadButton =
+  document.getElementById("downloadButton");
+
+const toast =
+  document.getElementById("toast");
+
+
+/* ================= ESTADO ================= */
 
 let currentCaption = "";
 let currentWhatsapp = "";
 let currentPostData = null;
 
 
-/* ==========================================
-   GERAR POST
-========================================== */
+/* ==================================================
+   GERAR
+================================================== */
 
-generateButton.addEventListener("click", generatePost);
+generateButton.addEventListener(
+  "click",
+  generatePost
+);
 
 
 function generatePost() {
 
   const business =
-    businessInput.value.trim() || "Minha Empresa";
+    businessInput.value.trim() ||
+    "Minha Empresa";
 
   const product =
-    productInput.value.trim() || "Produto Especial";
+    productInput.value.trim() ||
+    "Produto Especial";
 
   const price =
-    priceInput.value.trim() || "R$ 29,90";
+    priceInput.value.trim() ||
+    "R$ 29,90";
 
   const offer =
-    offerInput.value.trim() || "Oferta especial";
+    offerInput.value.trim() ||
+    "Oferta especial";
 
   const description =
     descriptionInput.value.trim() ||
@@ -62,9 +95,12 @@ function generatePost() {
     styleInput.value;
 
 
-  generateButton.classList.add("loading");
+  generateButton.classList.add(
+    "loading"
+  );
 
-  generateButton.textContent = "✨ Criando...";
+  generateButton.textContent =
+    "✨ Criando seu post...";
 
 
   setTimeout(() => {
@@ -79,108 +115,55 @@ function generatePost() {
     };
 
 
-    createPostPreview(currentPostData);
+    renderPost(
+      currentPostData
+    );
 
-    createCaption(currentPostData);
+    generateCaption(
+      currentPostData
+    );
 
-    createWhatsapp(currentPostData);
+    generateWhatsapp(
+      currentPostData
+    );
 
 
-    generateButton.classList.remove("loading");
+    generateButton.classList.remove(
+      "loading"
+    );
 
-    generateButton.textContent = "✨ Gerar novamente";
+    generateButton.textContent =
+      "✨ Gerar novamente";
 
-    downloadButton.disabled = false;
-    copyCaptionButton.disabled = false;
 
-  }, 700);
+    downloadButton.disabled =
+      false;
+
+    copyCaptionButton.disabled =
+      false;
+
+  }, 650);
 
 }
 
 
-/* ==========================================
-   CRIAR PRÉVIA
-========================================== */
+/* ==================================================
+   RENDER POST
+================================================== */
 
-function createPostPreview(data) {
+function renderPost(data) {
 
-  let background;
-
-
-  switch (data.style) {
-
-    case "premium":
-
-      background = `
-        radial-gradient(
-          circle at 85% 75%,
-          #6c3bff 0,
-          transparent 30%
-        ),
-        linear-gradient(
-          145deg,
-          #242126,
-          #08080a 70%
-        )
-      `;
-
-      break;
-
-
-    case "vibrante":
-
-      background = `
-        radial-gradient(
-          circle at 80% 80%,
-          #8b5cff 0,
-          transparent 35%
-        ),
-        linear-gradient(
-          145deg,
-          #331477,
-          #100817
-        )
-      `;
-
-      break;
-
-
-    case "minimalista":
-
-      background = `
-        linear-gradient(
-          145deg,
-          #29292d,
-          #101014
-        )
-      `;
-
-      break;
-
-
-    default:
-
-      background = `
-        radial-gradient(
-          circle at 80% 75%,
-          #6c3bff 0,
-          transparent 32%
-        ),
-        linear-gradient(
-          145deg,
-          #222227,
-          #09090b 70%
-        )
-      `;
-
-  }
+  const background =
+    getBackground(
+      data.style
+    );
 
 
   generatedPost.innerHTML = `
 
     <div
       class="generated-design"
-      style="background: ${background}"
+      style="background:${background}"
     >
 
       <div class="generated-brand">
@@ -190,14 +173,20 @@ function createPostPreview(data) {
 
       <div class="generated-main">
 
-        <small>PROMOÇÃO ESPECIAL</small>
+        <small>
+          OFERTA ESPECIAL
+        </small>
 
         <h3>
-          ${escapeHTML(data.product)}
+          ${escapeHTML(
+            data.product
+          )}
         </h3>
 
         <p>
-          ${escapeHTML(data.description)}
+          ${escapeHTML(
+            data.description
+          )}
         </p>
 
       </div>
@@ -205,17 +194,16 @@ function createPostPreview(data) {
 
       <div class="generated-bottom">
 
-        <div>
-
-          <div class="generated-price">
-            ${escapeHTML(data.price)}
-          </div>
-
+        <div class="generated-price">
+          ${escapeHTML(
+            data.price
+          )}
         </div>
 
-
         <div class="generated-offer">
-          ${escapeHTML(data.offer)}
+          ${escapeHTML(
+            data.offer
+          )}
         </div>
 
       </div>
@@ -227,11 +215,82 @@ function createPostPreview(data) {
 }
 
 
-/* ==========================================
-   GERAR LEGENDA
-========================================== */
+/* ==================================================
+   ESTILOS
+================================================== */
 
-function createCaption(data) {
+function getBackground(style) {
+
+  switch (style) {
+
+    case "premium":
+
+      return `
+        radial-gradient(
+          circle at 85% 80%,
+          #6c3bff 0,
+          transparent 32%
+        ),
+        linear-gradient(
+          145deg,
+          #29242d,
+          #08080a 70%
+        )
+      `;
+
+
+    case "vibrante":
+
+      return `
+        radial-gradient(
+          circle at 80% 80%,
+          #9b65ff 0,
+          transparent 38%
+        ),
+        linear-gradient(
+          145deg,
+          #39127a,
+          #100718
+        )
+      `;
+
+
+    case "minimalista":
+
+      return `
+        linear-gradient(
+          145deg,
+          #29292d,
+          #101014
+        )
+      `;
+
+
+    default:
+
+      return `
+        radial-gradient(
+          circle at 80% 80%,
+          #6c3bff 0,
+          transparent 33%
+        ),
+        linear-gradient(
+          145deg,
+          #25252b,
+          #09090b 70%
+        )
+      `;
+
+  }
+
+}
+
+
+/* ==================================================
+   LEGENDA
+================================================== */
+
+function generateCaption(data) {
 
   currentCaption =
 `🔥 ${data.product} em destaque!
@@ -239,175 +298,228 @@ function createCaption(data) {
 ${data.description}
 
 💰 ${data.price}
-
 🎁 ${data.offer}
 
 📲 Chame a gente e aproveite!
 
-#${createHashtag(data.business)}
+#${makeHashtag(data.business)}
 #promocao #oferta #negocio`;
 
-  captionOutput.textContent = currentCaption;
+
+  captionOutput.textContent =
+    currentCaption;
 
 }
 
 
-/* ==========================================
-   GERAR WHATSAPP
-========================================== */
+/* ==================================================
+   WHATSAPP
+================================================== */
 
-function createWhatsapp(data) {
+function generateWhatsapp(data) {
 
   currentWhatsapp =
-`🔥 Opa! Temos uma oferta especial!
+`🔥 OFERTA ESPECIAL!
 
-${data.product}
+Olá! Temos uma novidade para você:
+
+🍔 ${data.product}
+
 💰 ${data.price}
-
-${data.offer}
+🎁 ${data.offer}
 
 ${data.description}
 
-Quer aproveitar? Fale com a gente agora!`;
+Quer aproveitar?
 
-  whatsappOutput.textContent = currentWhatsapp;
-
-}
+📲 Fale com a gente agora!`;
 
 
-/* ==========================================
-   COPIAR TEXTO
-========================================== */
-
-copyTextButton.addEventListener("click", () => {
-
-  if (!currentCaption) {
-
-    showToast("Gere um post primeiro.");
-
-    return;
-  }
-
-  copyToClipboard(currentCaption);
-
-});
-
-
-copyWhatsappButton.addEventListener("click", () => {
-
-  if (!currentWhatsapp) {
-
-    showToast("Gere um post primeiro.");
-
-    return;
-  }
-
-  copyToClipboard(currentWhatsapp);
-
-});
-
-
-copyCaptionButton.addEventListener("click", () => {
-
-  if (!currentCaption) {
-
-    return;
-  }
-
-  copyToClipboard(currentCaption);
-
-});
-
-
-async function copyToClipboard(text) {
-
-  try {
-
-    await navigator.clipboard.writeText(text);
-
-    showToast("Copiado com sucesso!");
-
-  } catch (error) {
-
-    showToast("Não foi possível copiar.");
-
-  }
+  whatsappOutput.textContent =
+    currentWhatsapp;
 
 }
 
 
-/* ==========================================
-   DOWNLOAD
-========================================== */
+/* ==================================================
+   COPIAR LEGENDA
+================================================== */
 
-downloadButton.addEventListener("click", async () => {
+copyTextButton.addEventListener(
+  "click",
+  () => {
 
-  if (!currentPostData) {
+    if (!currentCaption) {
 
-    showToast("Gere um post primeiro.");
+      showToast(
+        "Gere um post primeiro."
+      );
 
-    return;
+      return;
+    }
+
+    copyText(
+      currentCaption
+    );
+
   }
+);
 
 
-  /*
-    V1:
-    Como o PostaPro ainda é um site estático,
-    o download será feito capturando a área
-    visual do post.
-  */
+copyCaptionButton.addEventListener(
+  "click",
+  () => {
 
+    if (!currentCaption) {
+      return;
+    }
+
+    copyText(
+      currentCaption
+    );
+
+  }
+);
+
+
+/* ==================================================
+   COPIAR WHATSAPP
+================================================== */
+
+copyWhatsappButton.addEventListener(
+  "click",
+  () => {
+
+    if (!currentWhatsapp) {
+
+      showToast(
+        "Gere um post primeiro."
+      );
+
+      return;
+    }
+
+    copyText(
+      currentWhatsapp
+    );
+
+  }
+);
+
+
+/* ==================================================
+   CLIPBOARD
+================================================== */
+
+async function copyText(text) {
 
   try {
 
-    const canvas =
-      await createCanvasFromPost(currentPostData);
-
-    const link =
-      document.createElement("a");
-
-    link.download =
-      "post-postapro.png";
-
-    link.href =
-      canvas.toDataURL("image/png");
-
-    link.click();
-
-    showToast("Post baixado!");
-
-  } catch (error) {
-
-    console.error(error);
+    await navigator.clipboard.writeText(
+      text
+    );
 
     showToast(
-      "Use uma captura de tela nesta primeira versão."
+      "Copiado com sucesso!"
+    );
+
+  } catch (error) {
+
+    showToast(
+      "Não foi possível copiar."
     );
 
   }
 
-});
+}
 
 
-/* ==========================================
-   CANVAS PARA DOWNLOAD
-========================================== */
+/* ==================================================
+   DOWNLOAD
+================================================== */
 
-async function createCanvasFromPost(data) {
+downloadButton.addEventListener(
+  "click",
+  async () => {
+
+    if (!currentPostData) {
+
+      showToast(
+        "Gere um post primeiro."
+      );
+
+      return;
+    }
+
+
+    try {
+
+      const canvas =
+        createCanvas(
+          currentPostData
+        );
+
+
+      const link =
+        document.createElement("a");
+
+
+      link.download =
+        "post-postapro.png";
+
+
+      link.href =
+        canvas.toDataURL(
+          "image/png"
+        );
+
+
+      link.click();
+
+
+      showToast(
+        "Arte baixada!"
+      );
+
+    } catch (error) {
+
+      console.error(error);
+
+      showToast(
+        "Não foi possível baixar."
+      );
+
+    }
+
+  }
+);
+
+
+/* ==================================================
+   CANVAS
+================================================== */
+
+function createCanvas(data) {
 
   const canvas =
-    document.createElement("canvas");
+    document.createElement(
+      "canvas"
+    );
 
-  canvas.width = 1080;
-  canvas.height = 1080;
+  canvas.width =
+    1080;
+
+  canvas.height =
+    1080;
+
 
   const ctx =
-    canvas.getContext("2d");
+    canvas.getContext(
+      "2d"
+    );
 
 
-  /*
-    Fundo
-  */
+  /* Fundo */
 
   const gradient =
     ctx.createLinearGradient(
@@ -417,6 +529,7 @@ async function createCanvasFromPost(data) {
       1080
     );
 
+
   gradient.addColorStop(
     0,
     "#25252b"
@@ -424,8 +537,9 @@ async function createCanvasFromPost(data) {
 
   gradient.addColorStop(
     1,
-    "#09090b"
+    "#08080a"
   );
+
 
   ctx.fillStyle =
     gradient;
@@ -438,9 +552,7 @@ async function createCanvasFromPost(data) {
   );
 
 
-  /*
-    Glow
-  */
+  /* Glow */
 
   const glow =
     ctx.createRadialGradient(
@@ -449,18 +561,20 @@ async function createCanvasFromPost(data) {
       20,
       850,
       850,
-      400
+      430
     );
+
 
   glow.addColorStop(
     0,
-    "rgba(108,59,255,0.75)"
+    "rgba(108,59,255,.8)"
   );
 
   glow.addColorStop(
     1,
     "rgba(108,59,255,0)"
   );
+
 
   ctx.fillStyle =
     glow;
@@ -473,15 +587,13 @@ async function createCanvasFromPost(data) {
   );
 
 
-  /*
-    Empresa
-  */
+  /* Marca */
 
   ctx.fillStyle =
     "#ffffff";
 
   ctx.font =
-    "bold 32px Inter, Arial";
+    "900 32px Inter, Arial";
 
   ctx.fillText(
     data.business,
@@ -490,38 +602,34 @@ async function createCanvasFromPost(data) {
   );
 
 
-  /*
-    Label
-  */
+  /* Label */
 
   ctx.fillStyle =
-    "#c9baff";
+    "#c8baff";
 
   ctx.font =
-    "bold 20px Inter, Arial";
+    "900 20px Inter, Arial";
 
   ctx.fillText(
-    "PROMOÇÃO ESPECIAL",
+    "OFERTA ESPECIAL",
     70,
-    260
+    255
   );
 
 
-  /*
-    Produto
-  */
+  /* Produto */
 
   ctx.fillStyle =
     "#ffffff";
 
   ctx.font =
-    "bold 86px Inter, Arial";
+    "900 82px Inter, Arial";
 
 
   const productLines =
     splitText(
       data.product.toUpperCase(),
-      800,
+      820,
       ctx
     );
 
@@ -530,25 +638,25 @@ async function createCanvasFromPost(data) {
     370;
 
 
-  productLines.forEach(line => {
+  productLines.forEach(
+    line => {
 
-    ctx.fillText(
-      line,
-      70,
-      y
-    );
+      ctx.fillText(
+        line,
+        70,
+        y
+      );
 
-    y += 95;
+      y += 95;
 
-  });
+    }
+  );
 
 
-  /*
-    Descrição
-  */
+  /* Descrição */
 
   ctx.fillStyle =
-    "#d1d1d6";
+    "#d2d2d7";
 
   ctx.font =
     "28px Inter, Arial";
@@ -557,30 +665,30 @@ async function createCanvasFromPost(data) {
   const descriptionLines =
     splitText(
       data.description,
-      760,
+      750,
       ctx
     );
 
 
-  y += 25;
+  y += 20;
 
 
-  descriptionLines.forEach(line => {
+  descriptionLines.forEach(
+    line => {
 
-    ctx.fillText(
-      line,
-      70,
-      y
-    );
+      ctx.fillText(
+        line,
+        70,
+        y
+      );
 
-    y += 42;
+      y += 42;
 
-  });
+    }
+  );
 
 
-  /*
-    Preço
-  */
+  /* Preço */
 
   ctx.fillStyle =
     "#ffffff";
@@ -594,10 +702,10 @@ async function createCanvasFromPost(data) {
 
 
   ctx.fillStyle =
-    "#09090b";
+    "#08080a";
 
   ctx.font =
-    "bold 38px Inter, Arial";
+    "900 37px Inter, Arial";
 
   ctx.fillText(
     data.price,
@@ -606,18 +714,26 @@ async function createCanvasFromPost(data) {
   );
 
 
-  /*
-    Oferta
-  */
+  /* Oferta */
 
   ctx.fillStyle =
-    "#ddd4ff";
+    "#ded5ff";
 
   ctx.font =
-    "bold 25px Inter, Arial";
+    "900 25px Inter, Arial";
+
+
+  const offer =
+    data.offer.length > 25
+      ? data.offer.substring(
+          0,
+          25
+        ) + "..."
+      : data.offer;
+
 
   ctx.fillText(
-    data.offer,
+    offer,
     700,
     880
   );
@@ -628,11 +744,15 @@ async function createCanvasFromPost(data) {
 }
 
 
-/* ==========================================
-   QUEBRAR TEXTO
-========================================== */
+/* ==================================================
+   QUEBRA DE TEXTO
+================================================== */
 
-function splitText(text, maxWidth, ctx) {
+function splitText(
+  text,
+  maxWidth,
+  ctx
+) {
 
   const words =
     text.split(" ");
@@ -642,32 +762,39 @@ function splitText(text, maxWidth, ctx) {
   let line = "";
 
 
-  words.forEach(word => {
+  words.forEach(
+    word => {
 
-    const testLine =
-      line + word + " ";
+      const test =
+        line + word + " ";
 
-    const metrics =
-      ctx.measureText(testLine);
+      const width =
+        ctx.measureText(
+          test
+        ).width;
 
-    if (
-      metrics.width > maxWidth &&
-      line !== ""
-    ) {
 
-      lines.push(line.trim());
+      if (
+        width > maxWidth &&
+        line !== ""
+      ) {
 
-      line =
-        word + " ";
+        lines.push(
+          line.trim()
+        );
 
-    } else {
+        line =
+          word + " ";
 
-      line =
-        testLine;
+      } else {
+
+        line =
+          test;
+
+      }
 
     }
-
-  });
+  );
 
 
   if (line.trim()) {
@@ -684,53 +811,81 @@ function splitText(text, maxWidth, ctx) {
 }
 
 
-/* ==========================================
+/* ==================================================
    HASHTAG
-========================================== */
+================================================== */
 
-function createHashtag(text) {
+function makeHashtag(text) {
 
   return text
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-zA-Z0-9]/g, "")
+    .replace(
+      /[\u0300-\u036f]/g,
+      ""
+    )
+    .replace(
+      /[^a-zA-Z0-9]/g,
+      ""
+    )
     .toLowerCase();
 
 }
 
 
-/* ==========================================
-   SEGURANÇA BÁSICA
-========================================== */
+/* ==================================================
+   SEGURANÇA
+================================================== */
 
 function escapeHTML(text) {
 
   return String(text)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
 
-/* ==========================================
+/* ==================================================
    TOAST
-========================================== */
+================================================== */
 
 function showToast(message) {
 
   toast.textContent =
     message;
 
-  toast.classList.add("show");
+  toast.classList.add(
+    "show"
+  );
 
 
-  setTimeout(() => {
+  setTimeout(
+    () => {
 
-    toast.classList.remove("show");
+      toast.classList.remove(
+        "show"
+      );
 
-  }, 2200);
+    },
+    2200
+  );
 
 }
